@@ -1,0 +1,5 @@
+.m2/
+storage/
+*.log
+*.tmp
+backend-java/config/local-secret.yml

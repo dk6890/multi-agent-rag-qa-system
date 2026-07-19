@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pydantic-settings
+chromadb
+sentence-transformers
+pdfplumber
+python-docx
+pandas

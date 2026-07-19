@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import: optional:file:./config/local-secret.yml
+  application:
+    name: rag-qa-backend
+  datasource:
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/rag_qa?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&connectTimeout=3000&socketTimeout=10000}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:1234}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 3000
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.rag.entity
+
+rag:
+  upload-dir: storage/uploads
+  allowed-file-types:
+    - txt
+    - pdf
+    - docx
+  max-file-size: 52428800
+  python:
+    service-url: ${RAG_PYTHON_SERVICE_URL:http://localhost:8000}
+    connect-timeout-ms: 5000
+    read-timeout-ms: 30000
+  llm:
+    endpoint: ${LLM_ENDPOINT:https://api.deepseek.com/chat/completions}
+    api-key: ${LLM_API_KEY:}
+    model: ${LLM_MODEL:deepseek-chat}
