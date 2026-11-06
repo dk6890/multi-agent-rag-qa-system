@@ -58,10 +58,11 @@ UPLOADED -> PROCESSING -> SUCCESS
    - 请求不包含 `sessionId` 时，创建 `qa_session`。
 4. Java 后台保存用户问题到 `qa_message`，`role=USER`。
 5. Java 后台调用 Python RAG：`POST /rag/search`。
-6. Python RAG 执行向量检索：
-   - 将问题向量化。
-   - 从向量库检索 topK 相关 chunk。
-   - 返回统一 `references` 结构。
+6. Python RAG 执行混合检索：
+   - 使用 jieba 分词和 BM25Plus 召回关键词候选。
+   - 用真实本地模型将问题向量化，从同模型指纹的语义集合召回候选。
+   - 用 RRF 融合两路名次，去重后返回 topK，保持统一 `references` 结构。
+   - 模型不可用时只允许明确标记的词法降级，不把旧 HashEmbedding 当语义向量使用。
 7. Java 后台基于用户问题和 `references` 构造 Prompt。
 8. Java 后台调用大模型生成回答。
 9. Java 后台保存助手回答到 `qa_message`，`role=ASSISTANT`。
@@ -104,3 +105,7 @@ UPLOADED -> PROCESSING -> SUCCESS
 - 上传文件名必须做安全处理，避免路径穿越。
 - 文件类型和文件大小必须有限制。
 - Python RAG 接口仅作为服务间接口使用，部署时应避免直接暴露到公网。
+
+## 结构分片与索引升级
+
+分片保留标题、问题及页码，按模型实际 token 上限检查，详见 [09-rag-upgrade.md](09-rag-upgrade.md)。同文件重建按代次先写入再发布，失败保留旧索引；旧集合不删除，语义向量按模型指纹隔离。`/rag/index` 在模型不可用时返回业务码 503，Java 按现有非 200 流程标记失败。

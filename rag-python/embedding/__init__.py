@@ -1,3 +1,3 @@
-from .embeddings import EmbeddingProvider
+from .embeddings import EmbeddingProvider, EmbeddingUnavailableError
 
-__all__ = ["EmbeddingProvider"]
+__all__ = ["EmbeddingProvider", "EmbeddingUnavailableError"]

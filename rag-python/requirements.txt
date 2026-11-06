@@ -1,8 +1,12 @@
 fastapi
 uvicorn[standard]
 pydantic-settings
-chromadb
-sentence-transformers
+chromadb>=1,<2
+sentence-transformers>=3,<6
 pdfplumber
 python-docx
-pandas
+pandas>=2.2,<3
+langchain-text-splitters>=0.3,<2
+charset-normalizer>=3,<4
+jieba>=0.42,<0.43
+rank-bm25>=0.2,<0.3

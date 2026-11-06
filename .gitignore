@@ -2,4 +2,6 @@
 storage/
 *.log
 *.tmp
+.venv/
+__pycache__/
 backend-java/config/local-secret.yml
